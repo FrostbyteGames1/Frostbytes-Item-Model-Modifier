@@ -1,0 +1,9 @@
+{
+  "command.no_target": "Selected item stack was empty",
+
+  "model.screen.title": "Remodel",
+  "model.screen.search": "Search Item Models",
+  "model.screen.reset_button": "Reset the item model",
+  "model.screen.set_button": "Set the selected item model",
+  "model.screen.close_button": "Exit"
+}

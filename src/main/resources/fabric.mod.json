@@ -1,0 +1,31 @@
+{
+	"schemaVersion": 1,
+	"id": "remodel",
+	"version": "${version}",
+	"name": "Frostbyte's Item Model Modifier",
+	"description": "Adds the /model command, allowing any item to be given any model",
+	"authors": [
+		"FrostbyteGames"
+	],
+	"contact": {
+		"homepage": "",
+		"sources": ""
+	},
+	"license": "CC-BY-NC",
+	"icon": "assets/remodel/textures/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"net.frostbyte.remodel.ItemModelModifier"
+		]
+	},
+	"mixins": [
+		"remodel.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.16.14",
+		"minecraft": "~1.21.7",
+		"java": ">=21",
+		"fabric-api": "*"
+	}
+}
