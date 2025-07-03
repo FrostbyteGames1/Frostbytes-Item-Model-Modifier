@@ -40,7 +40,7 @@ Once an item has been remodeled:
 - If the item is stackable, it will now only stack with other items with the same NBT data
 - If the item can be equipped to the head slot, its new model will be rendered instead of the armor texture
 
-![The suvival inventory of a player with the Ari default skin, wearing a Diamond Helmet remodeled to look like a Flowering Azalea Sapling](https://github.com/user-attachments/assets/f3e8cae3-f5d9-49be-8f60-c589163921af)
+![The survival inventory of a player with the Ari default skin, wearing a Diamond Helmet remodeled to look like a Flowering Azalea Sapling](https://github.com/user-attachments/assets/f3e8cae3-f5d9-49be-8f60-c589163921af)
 
 **FAQs:**
 
