@@ -10,9 +10,37 @@ This mod adds a ```/model``` command, allowing any item to be given any model. `
 - ```/model get```: Returns the identifier of the model that is currently applied to the item
 - ```/model set <identifier>```: Sets the item's model to the model defined by ```<identifier>```
 - ```/model reset```: Resets the item to its vanilla model
-- ```/model gui```: Opens a GUI which can be used to browse through every loaded model and apply one to the item
+- ```/model gui```: Opens a GUI which can be used to visually browse through every currently loaded item model
 
-Items modified via the ```/model``` command remain 100% vanilla, so the custom model will render even for players who don't have Frostbyte's Item Model Modifier installed. Additionally, if the item being modified is a helmet, the new model will override the helmet overlay.
+Items modified via the ```/model``` command remain 100% vanilla, so the custom model will render even for players who don't have [Frostbyte's Item Model Modifier](https://github.com/FrostbyteGames1/Frostbytes-Item-Model-Modifier) installed (as long as the model is vanilla or part of a texture pack that is shared by all players involved). Additionally, if the item being modified is a helmet, the new model will be rendered instead of the helmet texture.
+
+**Using the GUI:**
+
+When running the ```/model gui``` command while holding any item in the player's mainhand, a new Remodel screen will be opened. The two item slots at the top of the screen will display the current held item (left) and a preview of that item with the currently slected model applied (right).
+
+Below these item slots are a search bar and a stonecutter-style scrollable list of every currently loaded item model, listed in alphabetical order by identifier.
+
+The GUI also contains three buttons:
+- A blue circular arrow (left): resets the held item to its vanilla model
+- A green check mark (center): applies the currently selected model
+- A red X (right): exits the GUI
+
+![The /model GUI for an unmodified Diamond Helmet](https://github.com/user-attachments/assets/b3bcdda5-6f3a-4573-a684-e9239cee66fc)
+
+If any of the models in the list are clicked, the preview item slot (right) will update to reflect the current selection. The button with the green check mark (center) will then become active, signifying that it can be clicked to apply the current selection and exit the GUI.
+
+![The /model GUI for an unmodified Diamond Helmet with the Flowering Azalea Sapling model selected](https://github.com/user-attachments/assets/584f1183-77d9-4140-9bda-32bf26c663be)
+
+If ```/model gui``` is run with an already modified item in the player's mainhand, the button with the blue circular arrow (left) will be active, signifying that it can be clicked to reset the current item to its vanilla model and exit the GUI.
+
+![The /model GUI for an Diamond Helmet remodeled to look like a Flowering Azalea Sapling](https://github.com/user-attachments/assets/78f99b5b-2e34-4980-acda-5daca29d4382)
+
+Once an item has been remodeled:
+- No mod-dependent data will have been applied, meaning custom model will remain even if [Frostbyte's Item Model Modifier](https://github.com/FrostbyteGames1/Frostbytes-Item-Model-Modifier) is uninstalled 
+- If the item is stackable, it will now only stack with other items with the same NBT data
+- If the item can be equipped to the head slot, its new model will be rendered instead of the armor texture
+
+![The suvival inventory of a player with the Ari default skin, wearing a Diamond Helmet remodeled to look like a Flowering Azalea Sapling](https://github.com/user-attachments/assets/f3e8cae3-f5d9-49be-8f60-c589163921af)
 
 **FAQs:**
 
