@@ -1,4 +1,4 @@
-[![Frostbyte's Improved Inventory](https://github.com/FrostbyteGames1/Frostbytes-Improved-Inventory/assets/109047591/4fc5c1d7-2041-4a3b-bd2e-dd58494de9ec)]()
+[![Frostbyte's Item Model Modifier](https://github.com/user-attachments/assets/692713b2-8f4d-453a-b929-ac620778a534)](https://github.com/FrostbyteGames1/Frostbytes-Item-Model-Modifier)
 
 [![CurseForge](https://cf.way2muchnoise.eu/short_849346_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/frostbytes-item-model-modifier)
 [![Modrinth](https://img.shields.io/modrinth/dt/tBjxZ7JW?color=00AF5C&label=downloads&logo=modrinth)](https://modrinth.com/mod/frostbytes-item-model-modifier)
@@ -8,9 +8,11 @@
 
 This mod adds a ```/model``` command, allowing any item to be given any model. ```/model``` can be called with one of four arguments, as long as the player's main hand is not empty:
 - ```/model get```: Returns the identifier of the model that is currently applied to the item
-- ```/model set <_identifier_>```: Sets the item's model to the model defined by ```<identifier>```
+- ```/model set <identifier>```: Sets the item's model to the model defined by ```<identifier>```
 - ```/model reset```: Resets the item to its vanilla model
 - ```/model gui```: Opens a GUI which can be used to browse through every loaded model and apply one to the item
+
+Items modified via the ```/model``` command remain 100% vanilla, so the custom model will render even for players who don't have Frostbyte's Item Model Modifier installed. Additionally, if the item being modified is a helmet, the new model will override the helmet overlay.
 
 **FAQs:**
 
