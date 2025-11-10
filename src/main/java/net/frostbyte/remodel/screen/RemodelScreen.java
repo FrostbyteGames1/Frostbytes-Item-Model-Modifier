@@ -5,6 +5,7 @@ import net.fabricmc.api.Environment;
 import net.frostbyte.remodel.ItemModelModifier;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.RenderPipelines;
+import net.minecraft.client.gui.Click;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
@@ -276,14 +277,18 @@ public class RemodelScreen extends Screen {
     }
 
     @Override
-    public boolean mouseReleased(double mouseX, double mouseY, int button) {
+    public boolean mouseReleased(Click click) {
         this.canScroll = false;
-
-        return super.mouseReleased(mouseX, mouseY, button);
+        return super.mouseReleased(click);
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+    public boolean mouseClicked(Click click, boolean doubled) {
+        // Get mouse button info
+        int button = click.button();
+        double mouseX = click.x();
+        double mouseY = click.y();
+
         // Grab the scroll bar
         this.canScroll = button == GLFW.GLFW_MOUSE_BUTTON_1 && mouseX >= this.scrollerX && mouseX <= this.scrollerX + this.SCROLLBAR_WIDTH && mouseY >= this.scrollerY + (int) ((this.SCROLLBAR_AREA_HEIGHT - this.SCROLLBAR_HEIGHT) * this.scrollAmount) && mouseY <= this.scrollerY + (int) ((this.SCROLLBAR_AREA_HEIGHT - this.SCROLLBAR_HEIGHT) * this.scrollAmount) + this.SCROLLBAR_HEIGHT;
 
@@ -329,18 +334,18 @@ public class RemodelScreen extends Screen {
             this.searchBar.setText("");
         }
 
-        return super.mouseClicked(mouseX, mouseY, button);
+        return super.mouseClicked(click, doubled);
     }
 
     @Override
-    public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
+    public boolean mouseDragged(Click click, double offsetX, double offsetY) {
         if (this.shouldScroll() && this.canScroll) {
-            this.scrollAmount = ((float) mouseY - (float) this.scrollerY - (float) this.SCROLLBAR_HEIGHT / 2) / ((float) (this.scrollerY + this.SCROLLBAR_AREA_HEIGHT - this.scrollerY) - this.SCROLLBAR_HEIGHT);
+            this.scrollAmount = ((float) click.y() - (float) this.scrollerY - (float) this.SCROLLBAR_HEIGHT / 2) / ((float) (this.scrollerY + this.SCROLLBAR_AREA_HEIGHT - this.scrollerY) - this.SCROLLBAR_HEIGHT);
             this.scrollAmount = MathHelper.clamp(this.scrollAmount, 0.0F, 1.0F);
             this.scrollOffset = (int) ((double) (this.scrollAmount * (float) this.getMaxScroll()) + 0.5) * this.LIST_COLUMNS;
         }
 
-        return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
+        return super.mouseDragged(click, offsetX, offsetY);
     }
 
     @Override
