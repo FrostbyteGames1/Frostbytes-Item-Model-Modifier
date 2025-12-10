@@ -2,15 +2,16 @@ package net.frostbyte.remodel.command;
 
 import com.mojang.brigadier.context.CommandContext;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.frostbyte.remodel.command.argument.ItemModelArgumentType;
-import net.frostbyte.remodel.screen.RemodelScreen;
-import net.minecraft.client.MinecraftClient;
+import net.frostbyte.remodel.networking.ModNetworking;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.EquippableComponent;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
@@ -90,6 +91,7 @@ public class ModelCommand {
         return 1;
     }
 
+    @SuppressWarnings("DataFlowIssue")
     static int executeModelGet(CommandContext<ServerCommandSource> context) {
         PlayerEntity player = context.getSource().getPlayer();
         if (player != null) {
@@ -107,11 +109,11 @@ public class ModelCommand {
     }
 
     static int executeModelGui(CommandContext<ServerCommandSource> context) {
-        PlayerEntity player = context.getSource().getPlayer();
-        if (player != null && MinecraftClient.getInstance() != null) {
+        ServerPlayerEntity player = context.getSource().getPlayer();
+        if (player != null) {
             ItemStack stack = player.getInventory().getSelectedStack();
             if (!stack.isEmpty()) {
-                MinecraftClient.getInstance().send(() -> MinecraftClient.getInstance().setScreen(new RemodelScreen()));
+                ServerPlayNetworking.send(player, new ModNetworking.OpenModelGuiS2CPayload());
 
                 return 0;
             } else {

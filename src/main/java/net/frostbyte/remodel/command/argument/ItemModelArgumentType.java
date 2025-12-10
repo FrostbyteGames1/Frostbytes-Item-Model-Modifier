@@ -6,6 +6,8 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.command.CommandSource;
 import net.minecraft.component.DataComponentTypes;
@@ -18,7 +20,10 @@ public class ItemModelArgumentType implements ArgumentType<Identifier> {
     @Override
     public Identifier parse(StringReader stringReader) throws CommandSyntaxException {
         Identifier id = Identifier.fromCommandInput(stringReader);
-        return MinecraftClient.getInstance().getBakedModelManager().bakedItemModels.containsKey(id) ? id : ItemStack.EMPTY.getComponents().get(DataComponentTypes.ITEM_MODEL);
+        if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
+            return MinecraftClient.getInstance().getBakedModelManager().bakedItemModels.containsKey(id) ? id : ItemStack.EMPTY.getComponents().get(DataComponentTypes.ITEM_MODEL);
+        }
+        return id;
     }
 
     public static ItemModelArgumentType itemModel() {

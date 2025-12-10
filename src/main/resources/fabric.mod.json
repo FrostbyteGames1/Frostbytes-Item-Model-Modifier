@@ -17,6 +17,9 @@
 	"entrypoints": {
 		"main": [
 			"net.frostbyte.remodel.ItemModelModifier"
+		],
+		"client": [
+			"net.frostbyte.remodel.ItemModelModifierClient"
 		]
 	},
 	"mixins": [
