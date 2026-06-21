@@ -5,86 +5,87 @@ import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.frostbyte.remodel.command.argument.ItemModelArgumentType;
 import net.frostbyte.remodel.networking.ModNetworking;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.EquippableComponent;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.command.CommandManager;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.equipment.Equippable;
 
 import java.util.Optional;
 
 public class ModelCommand {
 
+    @SuppressWarnings("unused")
     public static void register() {
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> dispatcher.register(
-            CommandManager.literal("model")
-                .then(CommandManager.literal("set")
-                    .then(((((CommandManager.argument("model", ItemModelArgumentType.itemModel())
-                        .executes((context) -> executeModelSet(context, context.getArgument("model", Identifier.class)))))))
-                    )
-                )
-                .then(CommandManager.literal("reset").executes(ModelCommand::executeModelReset))
-                .then(CommandManager.literal("get").executes(ModelCommand::executeModelGet))
-                .then(CommandManager.literal("gui").executes(ModelCommand::executeModelGui))
-            )
-        );
+            Commands.literal("model")
+            .then(Commands.literal("set")
+            .then(((((Commands.argument("model", ItemModelArgumentType.itemModel())
+                .executes((context) -> executeModelSet(context, context.getArgument("model", Identifier.class)))))))
+            ))
+            .then(Commands.literal("reset").executes(ModelCommand::executeModelReset))
+            .then(Commands.literal("get").executes(ModelCommand::executeModelGet))
+            .then(Commands.literal("gui").executes(ModelCommand::executeModelGui))
+        ));
     }
 
-    static int executeModelSet(CommandContext<ServerCommandSource> context, Identifier model) {
-        PlayerEntity player = context.getSource().getPlayer();
+    static int executeModelSet(CommandContext<CommandSourceStack> context, Identifier model) {
+        Player player = context.getSource().getPlayer();
         if (player != null) {
-             ItemStack stack = player.getInventory().getSelectedStack();
+             ItemStack stack = player.getInventory().getSelectedItem();
              if (!stack.isEmpty()) {
-                 stack.set(DataComponentTypes.ITEM_MODEL, model);
+                 stack.set(DataComponents.ITEM_MODEL, model);
 
-                 EquippableComponent original = stack.get(DataComponentTypes.EQUIPPABLE);
-                 if (original != null) {
-                     stack.set(DataComponentTypes.EQUIPPABLE, new EquippableComponent(
-                         original.slot(),
-                         original.equipSound(),
+                 Equippable equippable = stack.get(DataComponents.EQUIPPABLE);
+                 if (equippable == null) {
+                     stack.set(DataComponents.EQUIPPABLE, Equippable.builder(EquipmentSlot.HEAD).build());
+                 } else if (equippable.slot() == EquipmentSlot.HEAD) {
+                     stack.set(DataComponents.EQUIPPABLE, new Equippable(
+                         EquipmentSlot.HEAD,
+                         equippable.equipSound(),
                          Optional.empty(),
-                         original.cameraOverlay(),
-                         original.allowedEntities(),
-                         original.dispensable(),
-                         original.swappable(),
-                         original.damageOnHurt(),
-                         original.equipOnInteract(),
-                         original.canBeSheared(),
-                         original.shearingSound()
+                         equippable.cameraOverlay(),
+                         equippable.allowedEntities(),
+                         equippable.dispensable(),
+                         equippable.swappable(),
+                         equippable.damageOnHurt(),
+                         equippable.equipOnInteract(),
+                         equippable.canBeSheared(),
+                         equippable.shearingSound()
                      ));
                  }
 
-                 player.playSoundToPlayer(SoundEvents.BLOCK_ANVIL_USE, SoundCategory.PLAYERS, 1, 1);
+                 player.playSound(SoundEvents.ANVIL_USE);
 
                  return 0;
              } else {
-                 context.getSource().sendFeedback(() -> Text.translatable("command.no_target"), false);
+                 context.getSource().sendFailure(Component.translatable("command.no_target"));
              }
         }
 
         return 1;
     }
 
-    static int executeModelReset(CommandContext<ServerCommandSource> context) {
-        PlayerEntity player = context.getSource().getPlayer();
+    static int executeModelReset(CommandContext<CommandSourceStack> context) {
+        Player player = context.getSource().getPlayer();
         if (player != null) {
-            ItemStack stack = player.getInventory().getSelectedStack();
+            ItemStack stack = player.getInventory().getSelectedItem();
             if (!stack.isEmpty()) {
-                stack.set(DataComponentTypes.ITEM_MODEL, stack.getItem().getDefaultStack().getComponents().get(DataComponentTypes.ITEM_MODEL));
+                stack.set(DataComponents.ITEM_MODEL, stack.getItem().getDefaultInstance().getComponents().get(DataComponents.ITEM_MODEL));
 
-                stack.set(DataComponentTypes.EQUIPPABLE, stack.getItem().getDefaultStack().get(DataComponentTypes.EQUIPPABLE));
+                stack.set(DataComponents.EQUIPPABLE, stack.getItem().getDefaultInstance().get(DataComponents.EQUIPPABLE));
 
-                player.playSoundToPlayer(SoundEvents.BLOCK_ANVIL_USE, SoundCategory.PLAYERS, 1, 1);
+                player.playSound(SoundEvents.ANVIL_USE);
 
                 return 0;
             } else {
-                context.getSource().sendFeedback(() -> Text.translatable("command.no_target"), false);
+                context.getSource().sendFailure(Component.translatable("command.no_target"));
             }
         }
 
@@ -92,32 +93,32 @@ public class ModelCommand {
     }
 
     @SuppressWarnings("DataFlowIssue")
-    static int executeModelGet(CommandContext<ServerCommandSource> context) {
-        PlayerEntity player = context.getSource().getPlayer();
+    static int executeModelGet(CommandContext<CommandSourceStack> context) {
+        Player player = context.getSource().getPlayer();
         if (player != null) {
-            ItemStack stack = player.getInventory().getSelectedStack();
+            ItemStack stack = player.getInventory().getSelectedItem();
             if (!stack.isEmpty()) {
-                context.getSource().sendFeedback(() -> Text.of(player.getInventory().getSelectedStack().get(DataComponentTypes.ITEM_MODEL)), false);
+                context.getSource().sendSystemMessage(Component.literal(player.getInventory().getSelectedItem().get(DataComponents.ITEM_MODEL).toString()));
 
                 return 0;
             } else {
-                context.getSource().sendFeedback(() -> Text.translatable("command.no_target"), false);
+                context.getSource().sendSystemMessage(Component.translatable("command.no_target"));
             }
         }
 
         return 1;
     }
 
-    static int executeModelGui(CommandContext<ServerCommandSource> context) {
-        ServerPlayerEntity player = context.getSource().getPlayer();
+    static int executeModelGui(CommandContext<CommandSourceStack> context) {
+        ServerPlayer player = context.getSource().getPlayer();
         if (player != null) {
-            ItemStack stack = player.getInventory().getSelectedStack();
+            ItemStack stack = player.getInventory().getSelectedItem();
             if (!stack.isEmpty()) {
                 ServerPlayNetworking.send(player, new ModNetworking.OpenModelGuiS2CPayload());
 
                 return 0;
             } else {
-                context.getSource().sendFeedback(() -> Text.translatable("command.no_target"), false);
+                context.getSource().sendFailure(Component.translatable("command.no_target"));
             }
         }
 
