@@ -44,7 +44,7 @@ Once an item has been remodeled:
 
 **FAQs:**
 
-- *Will this be updated to x.x.x?* - Yes! I plan on updating this mod for as long as I can. Expect to wait a few weeks after major Minecraft updates for an updated version of this mod. There may be longer pauses between minor versions depending on how busy I am.
+- *Will this be updated to [Insert Version]?* - Yes! I plan on updating this mod for as long as I can. Expect to wait a few weeks after major Minecraft updates for an updated version of this mod. There may be longer pauses between minor versions depending on how busy I am.
 - *Will you make a Forge version?* - No. I don't make Forge mods, but feel free to make your own (unofficial) port as long as you credit me for any code borrowed from this mod.
 - *Can I use this in my mod pack?* - Yes! I made this mod for people to use!
 
