@@ -38,7 +38,7 @@ If ```/model gui``` is run with an already modified item in the player's mainhan
 Once an item has been remodeled:
 - No mod-dependent data will have been applied, meaning custom model will remain even if [Frostbyte's Item Model Modifier](https://github.com/FrostbyteGames1/Frostbytes-Item-Model-Modifier) is uninstalled 
 - If the item is stackable, it will now only stack with other items with the same NBT data
-- If the item can be equipped to the head slot, its new model will be rendered instead of the armor texture
+- The item can be equipped to the head slot
 
 ![The survival inventory of a player with the Ari default skin, wearing a Diamond Helmet remodeled to look like a Flowering Azalea Sapling](https://github.com/user-attachments/assets/f3e8cae3-f5d9-49be-8f60-c589163921af)
 
