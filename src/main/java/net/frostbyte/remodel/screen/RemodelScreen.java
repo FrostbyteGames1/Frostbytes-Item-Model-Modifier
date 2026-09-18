@@ -1,5 +1,6 @@
 package net.frostbyte.remodel.screen;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.frostbyte.remodel.ItemModelModifier;
@@ -17,7 +18,6 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.equipment.Equippable;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.Comparator;
 import java.util.List;
@@ -285,10 +285,10 @@ public class RemodelScreen extends Screen {
         double mouseY = event.y();
 
         // Grab the scroll bar
-        this.canScroll = button == GLFW.GLFW_MOUSE_BUTTON_1 && mouseX >= this.scrollerX && mouseX <= this.scrollerX + this.SCROLLBAR_WIDTH && mouseY >= this.scrollerY + (int) ((this.SCROLLBAR_AREA_HEIGHT - this.SCROLLBAR_HEIGHT) * this.scrollAmount) && mouseY <= this.scrollerY + (int) ((this.SCROLLBAR_AREA_HEIGHT - this.SCROLLBAR_HEIGHT) * this.scrollAmount) + this.SCROLLBAR_HEIGHT;
+        this.canScroll = button == InputConstants.MOUSE_BUTTON_LEFT && mouseX >= this.scrollerX && mouseX <= this.scrollerX + this.SCROLLBAR_WIDTH && mouseY >= this.scrollerY + (int) ((this.SCROLLBAR_AREA_HEIGHT - this.SCROLLBAR_HEIGHT) * this.scrollAmount) && mouseY <= this.scrollerY + (int) ((this.SCROLLBAR_AREA_HEIGHT - this.SCROLLBAR_HEIGHT) * this.scrollAmount) + this.SCROLLBAR_HEIGHT;
 
         // Select a new model from the list
-        if (button == GLFW.GLFW_MOUSE_BUTTON_1 && mouseX >= this.modelListX && mouseX <= this.modelListX + this.ENTRY_WIDTH * this.LIST_COLUMNS && mouseY >= this.modelListY && mouseY <= this.modelListY + this.ENTRY_HEIGHT * this.LIST_ROWS) {
+        if (button == InputConstants.MOUSE_BUTTON_LEFT && mouseX >= this.modelListX && mouseX <= this.modelListX + this.ENTRY_WIDTH * this.LIST_COLUMNS && mouseY >= this.modelListY && mouseY <= this.modelListY + this.ENTRY_HEIGHT * this.LIST_ROWS) {
             int col = Math.floorDiv((int) (mouseX - this.modelListX), this.ENTRY_WIDTH);
             int row = Math.floorDiv((int) (mouseY - this.modelListY), this.ENTRY_HEIGHT);
             int entry = this.scrollOffset + col + row * this.LIST_COLUMNS;
@@ -304,7 +304,7 @@ public class RemodelScreen extends Screen {
         ItemStack stack = this.player.getInventory().getSelectedItem();
 
         // Reset the model
-        if (button == GLFW.GLFW_MOUSE_BUTTON_1 && mouseX >= this.resetButtonX && mouseX <= this.resetButtonX + 22 && mouseY >= this.resetButtonY && mouseY <= this.resetButtonY + 22) {
+        if (button == InputConstants.MOUSE_BUTTON_LEFT && mouseX >= this.resetButtonX && mouseX <= this.resetButtonX + 22 && mouseY >= this.resetButtonY && mouseY <= this.resetButtonY + 22) {
             this.player.playSound(SoundEvents.UI_BUTTON_CLICK.value());
             stack.set(DataComponents.ITEM_MODEL, stack.getItem().getDefaultInstance().getComponents().get(DataComponents.ITEM_MODEL));
             stack.set(DataComponents.EQUIPPABLE, stack.getItem().getDefaultInstance().get(DataComponents.EQUIPPABLE));
@@ -313,7 +313,7 @@ public class RemodelScreen extends Screen {
         }
 
         // Set the model
-        if (button == GLFW.GLFW_MOUSE_BUTTON_1 && mouseX >= this.setButtonX && mouseX <= this.setButtonX + 22 && mouseY >= this.setButtonY && mouseY <= this.setButtonY + 22) {
+        if (button == InputConstants.MOUSE_BUTTON_LEFT && mouseX >= this.setButtonX && mouseX <= this.setButtonX + 22 && mouseY >= this.setButtonY && mouseY <= this.setButtonY + 22) {
             this.player.playSound(SoundEvents.UI_BUTTON_CLICK.value());
             if (!ItemStack.isSameItemSameComponents(this.original, this.modified)) {
                 stack.set(DataComponents.ITEM_MODEL, this.selectedIdentifier);
@@ -341,13 +341,13 @@ public class RemodelScreen extends Screen {
         }
 
         // Close the screen
-        if (button == GLFW.GLFW_MOUSE_BUTTON_1 && mouseX >= this.closeButtonX && mouseX <= this.closeButtonX + 22 && mouseY >= this.closeButtonY && mouseY <= this.closeButtonY + 22) {
+        if (button == InputConstants.MOUSE_BUTTON_LEFT && mouseX >= this.closeButtonX && mouseX <= this.closeButtonX + 22 && mouseY >= this.closeButtonY && mouseY <= this.closeButtonY + 22) {
             this.player.playSound(SoundEvents.UI_BUTTON_CLICK.value());
             this.onClose();
         }
 
         // Clear the search bar
-        if (button == GLFW.GLFW_MOUSE_BUTTON_2 && this.searchBar.isHovered()) {
+        if (button == InputConstants.MOUSE_BUTTON_RIGHT && this.searchBar.isHovered()) {
             this.searchBar.setValue("");
         }
 
