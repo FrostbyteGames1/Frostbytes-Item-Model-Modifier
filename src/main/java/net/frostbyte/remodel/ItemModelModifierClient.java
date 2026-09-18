@@ -9,6 +9,6 @@ public class ItemModelModifierClient implements ClientModInitializer {
     @SuppressWarnings("unused")
     @Override
     public void onInitializeClient() {
-        ClientPlayNetworking.registerGlobalReceiver(ModNetworking.OpenModelGuiS2CPayload.TYPE, (payload, context) -> context.client().execute(() -> context.client().setScreen(new RemodelScreen())));
+        ClientPlayNetworking.registerGlobalReceiver(ModNetworking.OpenModelGuiS2CPayload.TYPE, (payload, context) -> context.client().execute(() -> context.client().gui.setScreen(new RemodelScreen())));
     }
 }
